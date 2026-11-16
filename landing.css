@@ -82,6 +82,7 @@ h1.big .line:nth-child(2) > span { animation-delay: 1.9s; background: linear-gra
 .day { position: relative; height: 560vh; --p: 0; }
 .day-stage { position: sticky; top: 0; height: 100svh; overflow: hidden; display: grid; align-items: center; }
 .day-sky { position: absolute; inset: 0; z-index: -1; transition: background 0.6s linear; background: radial-gradient(70% 60% at var(--gx, 20%) var(--gy, 80%), var(--g1, rgba(255, 106, 61, 0.35)), transparent 70%), radial-gradient(60% 50% at 85% 10%, var(--g2, rgba(120, 90, 255, 0.12)), transparent 70%), var(--ink); }
+.day-sky::after { content: ""; position: absolute; inset: auto 0 0; height: 16%; background: linear-gradient(transparent, var(--ink)); }
 .day-arc { position: absolute; inset: auto 4% 2%; height: 34%; z-index: -1; overflow: visible; opacity: 0.55; }
 .day-arc path { fill: none; stroke: rgba(246, 244, 239, 0.18); stroke-width: 2; stroke-dasharray: 2 10; stroke-linecap: round; }
 .day-arc circle.sun { fill: var(--ember); filter: drop-shadow(0 0 18px var(--ember)); }
@@ -100,12 +101,12 @@ h1.big .line:nth-child(2) > span { animation-delay: 1.9s; background: linear-gra
 .dots { display: flex; gap: 10px; margin-top: 34px; }
 .dots i { width: 28px; height: 4px; border-radius: 4px; background: rgba(246, 244, 239, 0.16); transition: background 0.4s, width 0.4s var(--ease); }
 .dots i.on { background: var(--ember); width: 54px; }
-.phone { position: relative; width: min(340px, 78vw); aspect-ratio: 1290 / 2796; margin-inline: auto; border-radius: 52px; padding: 11px; background: linear-gradient(145deg, #2a303c, #12151b 40%, #262b36); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 40px 120px rgba(0, 0, 0, 0.6), 0 0 120px rgba(255, 106, 61, 0.12); }
-.phone .screen { position: relative; width: 100%; height: 100%; border-radius: 42px; overflow: hidden; background: #0f1218; }
+.phone { --w: min(340px, 78vw, 38svh); position: relative; width: var(--w); aspect-ratio: 1290 / 2796; margin-inline: auto; border-radius: calc(var(--w) * 0.155); padding: calc(var(--w) * 0.032); background: linear-gradient(145deg, #2a303c, #12151b 40%, #262b36); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 40px 120px rgba(0, 0, 0, 0.6), 0 0 120px rgba(255, 106, 61, 0.12); }
+.phone .screen { position: relative; width: 100%; height: 100%; border-radius: calc(var(--w) * 0.125); overflow: hidden; background: #0f1218; }
 .phone .screen img { position: absolute; inset: 6.5% 0 auto; width: 100%; height: 93.5%; object-fit: cover; object-position: top; clip-path: inset(100% 0 0 0); transform: translateY(6%) scale(1.02); transition: clip-path 0.9s var(--ease), transform 1.1s var(--ease); z-index: 0; }
 .phone .screen img.was { clip-path: inset(0 0 0 0); transform: none; z-index: 1; transition: none; }
 .phone .screen img.on { clip-path: inset(0 0 0 0); transform: none; z-index: 2; }
-.phone .island { position: absolute; top: 22px; left: 50%; width: 30%; height: 3.4%; transform: translateX(-50%); border-radius: 999px; background: #000; z-index: 2; }
+.phone .island { position: absolute; top: calc(var(--w) * 0.062); left: 50%; width: 30%; height: 3.4%; transform: translateX(-50%); border-radius: 999px; background: #000; z-index: 2; }
 .phone-wrap { position: relative; transform: rotate(calc(-4deg + var(--p) * 8deg)) translateY(calc(var(--p) * -20px)); transition: transform 0.2s linear; }
 
 /* ---------- privacy ---------- */
@@ -186,8 +187,8 @@ h1.big .line:nth-child(2) > span { animation-delay: 1.9s; background: linear-gra
 .film-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 60px; align-items: center; }
 .film h2 { font: 700 clamp(38px, 5.4vw, 72px)/1 var(--display); letter-spacing: -0.04em; margin: 0 0 18px; }
 .film p { color: var(--muted); font-size: 19px; margin: 0; max-width: 46ch; }
-.film .phone { width: min(320px, 72vw); }
-.film video { width: 100%; height: 100%; object-fit: cover; border-radius: 42px; }
+.film .phone { --w: min(320px, 72vw, 38svh); }
+.film video { width: 100%; height: 100%; object-fit: cover; border-radius: calc(var(--w) * 0.125); }
 
 /* ---------- finale: the sun finishes its arc and sets behind the horizon ---------- */
 .finale { position: relative; min-height: 100svh; display: grid; align-content: center; text-align: center; overflow: hidden; isolation: isolate; padding: 12svh 0 10svh; --set: 0; }
@@ -220,15 +221,16 @@ footer a:hover { color: var(--paper); }
   .store { padding: 11px 16px 11px 14px; }
   .store strong { font-size: 16px; }
   .day { height: 520vh; }
-  .day-grid { grid-template-columns: 1fr; gap: 10px; align-content: center; height: 100svh; padding-top: 76px; }
+  .day-grid { grid-template-columns: 1fr; gap: 6px; align-content: center; height: 100svh; padding-top: 64px; }
   .day-copy { order: 2; }
   .clock { font-size: clamp(56px, 16vw, 96px); }
-  .beats { min-height: 170px; margin-top: 8px; }
+  .beats { min-height: 190px; margin-top: 6px; }
   .beat h2 { font-size: clamp(26px, 7vw, 36px); margin-bottom: 8px; }
   .beat p { font-size: 16px; }
   .beat .tag { margin-bottom: 6px; }
   .dots { margin-top: 14px; }
-  .phone-wrap .phone { width: auto; height: min(46svh, 470px); }
+  .phone-wrap { transform: none; height: 45svh; overflow: hidden; display: grid; justify-items: center; align-items: start; padding-top: 6px; -webkit-mask-image: linear-gradient(#000 70%, transparent 98%); mask-image: linear-gradient(#000 70%, transparent 98%); }
+  .phone-wrap .phone { --w: min(66vw, 300px, 34svh); margin: 0; }
   .zero { grid-template-columns: 1fr; gap: 10px; }
   .locks { grid-template-columns: 1fr; }
   .bento { grid-template-columns: 1fr; }
