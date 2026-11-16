@@ -140,14 +140,22 @@
     const fr = finale.getBoundingClientRect();
     const s = clamp((vh - fr.top) / (vh + fr.height * 0.3));
     finale.style.setProperty('--set', s.toFixed(3));
-    const along = LOGO_AT + (1 - LOGO_AT) * clamp(s * 1.5);
-    const sp = setArc.getPointAtLength(setLen * along);
-    // past the arc's end it goes straight down, behind the horizon (clipped at y 640)
-    const sink = clamp((s * 1.5 - 1) * 3.5) * 110;
-    setSun.setAttribute('cx', sp.x);
-    setSun.setAttribute('cy', sp.y + sink);
-    setGlow.setAttribute('cx', sp.x);
-    setGlow.setAttribute('cy', sp.y + sink);
+    // along the arc to its end on the horizon, then on round the same circle, under the horizon (clipped)
+    const along = clamp(s * 1.5);
+    let sx, sy;
+    if (along < 1) {
+      const sp = setArc.getPointAtLength(setLen * (LOGO_AT + (1 - LOGO_AT) * along));
+      sx = sp.x;
+      sy = sp.y;
+    } else {
+      const a = clamp((s * 1.5 - 1) * 2.5) * (Math.PI / 6);
+      sx = 512 + 236 * Math.cos(a);
+      sy = 600 + 236 * Math.sin(a);
+    }
+    setSun.setAttribute('cx', sx);
+    setSun.setAttribute('cy', sy);
+    setGlow.setAttribute('cx', sx);
+    setGlow.setAttribute('cy', sy);
   };
   let ticking = false;
   addEventListener('scroll', () => {
