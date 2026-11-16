@@ -114,6 +114,8 @@
   const setArc = $('#setArc');
   const setSun = $('#setSun');
   const setGlow = $('#setGlow');
+  // where the sun's lower edge meets the horizon (radius 34 on a 236 arc ending at y 600)
+  const REST_AT = 1 - Math.asin(36 / 236) / Math.PI;
   const setLen = setArc.getTotalLength();
 
   const onScroll = () => {
@@ -140,22 +142,12 @@
     const fr = finale.getBoundingClientRect();
     const s = clamp((vh - fr.top) / (vh + fr.height * 0.3));
     finale.style.setProperty('--set', s.toFixed(3));
-    // along the arc to its end on the horizon, then on round the same circle, under the horizon (clipped)
-    const along = clamp(s * 1.5);
-    let sx, sy;
-    if (along < 1) {
-      const sp = setArc.getPointAtLength(setLen * (LOGO_AT + (1 - LOGO_AT) * along));
-      sx = sp.x;
-      sy = sp.y;
-    } else {
-      const a = clamp((s * 1.5 - 1) * 2.5) * (Math.PI / 6);
-      sx = 512 + 236 * Math.cos(a);
-      sy = 600 + 236 * Math.sin(a);
-    }
-    setSun.setAttribute('cx', sx);
-    setSun.setAttribute('cy', sy);
-    setGlow.setAttribute('cx', sx);
-    setGlow.setAttribute('cy', sy);
+    // the sun stays on its arc: from where it sits in the logo down to the arc's foot, resting just on the horizon
+    const sp = setArc.getPointAtLength(setLen * (LOGO_AT + (REST_AT - LOGO_AT) * easeOut(clamp(s * 1.25))));
+    setSun.setAttribute('cx', sp.x);
+    setSun.setAttribute('cy', sp.y);
+    setGlow.setAttribute('cx', sp.x);
+    setGlow.setAttribute('cy', sp.y);
   };
   let ticking = false;
   addEventListener('scroll', () => {
